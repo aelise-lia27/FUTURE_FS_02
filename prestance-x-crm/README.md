@@ -30,12 +30,12 @@ Internship**.
 The UI uses a bespoke Tailwind palette instead of a generic template look,
 defined in `frontend/tailwind.config.js`:
 
-| Token     | Role                                              |
-|-----------|-----------------------------------------------------|
+| Token     | Role                                                                                                               |
+| --------- | ------------------------------------------------------------------------------------------------------------------ |
 | `ink`     | Deep black/charcoal tones — `900` dark backgrounds (sidebar, login screen), `50` near-white for light text/borders |
-| `gold`    | Subtle gold accent — `500`/`600` primary buttons, active states, highlights |
-| `cream`   | Off-white / broken white — page background, card surfaces |
-| `leather` | Warm brown — destructive actions, secondary accents |
+| `gold`    | Subtle gold accent — `500`/`600` primary buttons, active states, highlights                                        |
+| `cream`   | Off-white / broken white — page background, card surfaces                                                          |
+| `leather` | Warm brown — destructive actions, secondary accents                                                                |
 
 All custom buttons/inputs/cards are defined once as reusable classes in
 `frontend/src/index.css` (`.btn-primary`, `.card`, `.input`, `.badge`, etc.),
@@ -66,12 +66,12 @@ desktop, top nav on mobile).
 
 ## 🏗️ Tech Stack
 
-| Layer      | Technology                                   |
-|------------|-----------------------------------------------|
-| Frontend   | React, Vite, Tailwind CSS, React Router, Axios |
-| Backend    | Node.js, Express.js                           |
-| Database   | MySQL (via XAMPP), mysql2                     |
-| Auth       | JWT, bcrypt                                   |
+| Layer    | Technology                                     |
+| -------- | ---------------------------------------------- |
+| Frontend | React, Vite, Tailwind CSS, React Router, Axios |
+| Backend  | Node.js, Express.js                            |
+| Database | MySQL (via XAMPP), mysql2                      |
+| Auth     | JWT, bcrypt                                    |
 
 ---
 
@@ -217,10 +217,10 @@ credentials printed in step 3.
 
 ## 🔑 Default Seeded Accounts
 
-| Role       | Email                       | Password         |
-|------------|------------------------------|-------------------|
-| Admin      | admin@prestancex.com        | Admin@12345       |
-| Commercial | commercial@prestancex.com   | Commercial@12345  |
+| Role       | Email                     | Password         |
+| ---------- | ------------------------- | ---------------- |
+| Admin      | admin@prestancex.com      | Admin@12345      |
+| Commercial | commercial@prestancex.com | Commercial@12345 |
 
 > ⚠️ These are development defaults defined in `backend/.env.example`.
 > Change `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` in your own `.env`
@@ -237,49 +237,49 @@ All protected routes require a header: `Authorization: Bearer <token>`
 
 ### Auth
 
-| Method | Endpoint         | Access | Description            |
-|--------|------------------|--------|-------------------------|
-| POST   | `/auth/login`    | Public | Login, returns JWT      |
-| GET    | `/auth/me`       | Private| Get current user        |
+| Method | Endpoint      | Access  | Description        |
+| ------ | ------------- | ------- | ------------------ |
+| POST   | `/auth/login` | Public  | Login, returns JWT |
+| GET    | `/auth/me`    | Private | Get current user   |
 
 ### Users (Admin only)
 
-| Method | Endpoint              | Description          |
-|--------|------------------------|-----------------------|
-| GET    | `/users`               | List all users        |
-| GET    | `/users/:id`           | Get single user       |
-| POST   | `/users`               | Create user           |
-| PUT    | `/users/:id`           | Update user           |
-| PUT    | `/users/:id/password`  | Reset user password   |
-| DELETE | `/users/:id`           | Delete user           |
+| Method | Endpoint              | Description         |
+| ------ | --------------------- | ------------------- |
+| GET    | `/users`              | List all users      |
+| GET    | `/users/:id`          | Get single user     |
+| POST   | `/users`              | Create user         |
+| PUT    | `/users/:id`          | Update user         |
+| PUT    | `/users/:id/password` | Reset user password |
+| DELETE | `/users/:id`          | Delete user         |
 
 ### Leads (Admin + Commercial, unless noted)
 
-| Method | Endpoint              | Access          | Description                    |
-|--------|------------------------|-----------------|----------------------------------|
-| GET    | `/leads`               | Private         | List leads (filters, search, pagination) |
-| GET    | `/leads/:id`           | Private         | Get single lead + notes         |
-| POST   | `/leads`               | Private         | Create a lead                   |
-| PUT    | `/leads/:id`           | Private         | Update a lead                   |
-| PATCH  | `/leads/:id/status`    | Private         | Update only the status          |
-| DELETE | `/leads/:id`           | **Admin only**  | Delete a lead                   |
+| Method | Endpoint            | Access         | Description                              |
+| ------ | ------------------- | -------------- | ---------------------------------------- |
+| GET    | `/leads`            | Private        | List leads (filters, search, pagination) |
+| GET    | `/leads/:id`        | Private        | Get single lead + notes                  |
+| POST   | `/leads`            | Private        | Create a lead                            |
+| PUT    | `/leads/:id`        | Private        | Update a lead                            |
+| PATCH  | `/leads/:id/status` | Private        | Update only the status                   |
+| DELETE | `/leads/:id`        | **Admin only** | Delete a lead                            |
 
 Query params supported on `GET /leads`: `status`, `lead_source`,
 `interested_product`, `search`, `page`, `limit`.
 
 ### Notes
 
-| Method | Endpoint                     | Access          | Description             |
-|--------|-------------------------------|-----------------|---------------------------|
-| GET    | `/leads/:leadId/notes`        | Private         | List notes for a lead     |
-| POST   | `/leads/:leadId/notes`        | Private         | Add a note to a lead      |
-| DELETE | `/notes/:id`                  | **Admin only**  | Delete a note              |
+| Method | Endpoint               | Access         | Description           |
+| ------ | ---------------------- | -------------- | --------------------- |
+| GET    | `/leads/:leadId/notes` | Private        | List notes for a lead |
+| POST   | `/leads/:leadId/notes` | Private        | Add a note to a lead  |
+| DELETE | `/notes/:id`           | **Admin only** | Delete a note         |
 
 ### Dashboard
 
-| Method | Endpoint             | Description                              |
-|--------|-----------------------|--------------------------------------------|
-| GET    | `/dashboard/stats`    | Total / new / contacted / converted + recent leads |
+| Method | Endpoint           | Description                                        |
+| ------ | ------------------ | -------------------------------------------------- |
+| GET    | `/dashboard/stats` | Total / new / contacted / converted + recent leads |
 
 ---
 
