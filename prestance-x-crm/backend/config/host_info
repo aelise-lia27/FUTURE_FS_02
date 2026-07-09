@@ -1,0 +1,25 @@
+Service URI
+mysql://
+CLICK_TO:REVEAL_PASSWORD
+@mysql-2a36096c-liagbanan-27dd.d.aivencloud.com:18251/defaultdb?ssl-mode=REQUIRED
+
+Database name
+defaultdb
+
+Host
+mysql-2a36096c-liagbanan-27dd.d.aivencloud.com
+
+Port
+18251
+
+User
+avnadmin
+
+Password
+**********
+
+
+
+SSL mode
+REQUIRED
+
