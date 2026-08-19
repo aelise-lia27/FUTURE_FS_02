@@ -1,337 +1,208 @@
 # Prestance X — Mini CRM
 
-A full-stack Mini CRM built for **Prestance X**, a small second-hand fashion
-business, to manage leads coming from WhatsApp, Facebook, Instagram, the
-website, referrals and walk-ins.
+Ce dépôt contient une application Mini CRM full-stack développée pour la
+gestion des prospects d'une petite activité (« Prestance X »). L'application
+est composée d'une API Node/Express (backend) et d'une interface client
+React (frontend). Le projet a été réalisé dans le cadre du
+programme « Future Interns — Full Stack Web Development Internship ».
 
-Built as part of the **Future Interns — Full Stack Web Development
-Internship**.
+## Description
 
----
+Prestance X est une application interne simple permettant :
+- la gestion des prospects (CRUD) ;
+- le suivi des statuts (New → Contacted → Converted) ;
+- l'ajout de notes de suivi par prospect ;
+- la gestion des utilisateurs (comptes Admin / Commercial) avec contrôle
+  d'accès par rôle ;
+- un tableau de bord présentant des statistiques et les prospects récents.
 
-## ✨ Features
+L'API est conçue pour être connectable ultérieurement à un formulaire
+de contact public (champ `lead_source` par défaut = `Website`).
 
-- 🔐 Simple JWT authentication (no public registration — accounts are seeded/managed by an Admin)
-- 👥 Two roles: **Admin** (full access) and **Commercial** (view leads, update status, add notes)
-- 📋 Full Lead CRUD with status pipeline: `New → Contacted → Converted`
-- 📝 Follow-up notes per lead (author + timestamp)
-- 📊 Dashboard with live stats (total / new / contacted / converted + recent leads)
-- 🔍 Search & filter leads by status, source, product, or keyword
-- 📱 Fully responsive Tailwind UI (desktop sidebar / mobile top nav)
-- 🍞 Toast notifications, loading states, and clean error handling throughout
-- 🧱 Clean MVC backend architecture, ready to plug into a real website contact form
-- 🎨 Custom "ink / gold / cream / leather" design system (see below)
-- 🌍 Bilingual UI — **French (default) and English**, switchable at any time
+## Fonctionnalités principales
 
----
+- Authentification JWT (login) ;
+- Rôles : `admin` (accès complet) et `commercial` (accès restreint) ;
+- CRUD complet pour les prospects (`/api/leads`) avec filtres, recherche et
+  pagination ;
+- Ajout / consultation / suppression de notes liées à un prospect ;
+- Gestion des utilisateurs (`/api/users`, Admin uniquement) ;
+- Dashboard (`/api/dashboard/stats`) fournissant totaux et récents ;
+- Interface React/Vite responsive (Tailwind CSS) avec prise en charge de
+  deux langues (français / anglais).
 
-## 🎨 Design System
+## Technologies
 
-The UI uses a bespoke Tailwind palette instead of a generic template look,
-defined in `frontend/tailwind.config.js`:
+- Frontend : React, Vite, Tailwind CSS, React Router, Axios
+- Backend : Node.js, Express.js
+- Base de données : MySQL (utilise `mysql2`)
+- Auth : JWT, mots de passe hachés avec `bcrypt`
 
-| Token     | Role                                                                                                               |
-| --------- | ------------------------------------------------------------------------------------------------------------------ |
-| `ink`     | Deep black/charcoal tones — `900` dark backgrounds (sidebar, login screen), `50` near-white for light text/borders |
-| `gold`    | Subtle gold accent — `500`/`600` primary buttons, active states, highlights                                        |
-| `cream`   | Off-white / broken white — page background, card surfaces                                                          |
-| `leather` | Warm brown — destructive actions, secondary accents                                                                |
-
-All custom buttons/inputs/cards are defined once as reusable classes in
-`frontend/src/index.css` (`.btn-primary`, `.card`, `.input`, `.badge`, etc.),
-so the palette can be restyled from a single place if needed.
-
----
-
-## 🌍 Bilingual (French / English)
-
-The interface defaults to **French** and can be switched to English at any
-time via the language toggle (top-right on the login screen, sidebar on
-desktop, top nav on mobile).
-
-- All UI strings live in `frontend/src/i18n/translations.js`, organized by
-  page/section (`login`, `dashboard`, `leads`, `users`, `enums`, …).
-- Language preference is handled by `frontend/src/context/LanguageContext.jsx`
-  via a lightweight custom `t(key, params)` function (no extra runtime
-  dependency) and persisted in `localStorage` so it's remembered across visits.
-- Enum values coming from the database (lead status, source, product) are
-  translated for display via `t('enums.statuses.New')`, etc. — the underlying
-  stored values in MySQL stay in English so the API/database contract never
-  changes.
-- To add a new language, duplicate the `fr` (or `en`) block in
-  `translations.js`, translate the strings, and add a button to
-  `LanguageSwitcher.jsx`.
-
----
-
-## 🏗️ Tech Stack
-
-| Layer    | Technology                                     |
-| -------- | ---------------------------------------------- |
-| Frontend | React, Vite, Tailwind CSS, React Router, Axios |
-| Backend  | Node.js, Express.js                            |
-| Database | MySQL (via XAMPP), mysql2                      |
-| Auth     | JWT, bcrypt                                    |
-
----
-
-## 📁 Folder Structure
+## Arborescence (extrait)
 
 ```
 prestance-x-crm/
 ├── backend/
-│   ├── config/
-│   │   └── db.js                 # MySQL connection pool
-│   ├── controllers/               # Business logic
-│   │   ├── authController.js
-│   │   ├── userController.js
-│   │   ├── leadController.js
-│   │   ├── noteController.js
-│   │   └── dashboardController.js
-│   ├── database/
-│   │   ├── schema.sql             # Full DB schema
-│   │   └── seed.js                # Seeds Admin + sample data
-│   ├── middleware/
-│   │   ├── authMiddleware.js      # JWT verification
-│   │   ├── roleMiddleware.js      # Role-based access control
-│   │   ├── errorMiddleware.js     # Centralized error handling
-│   │   └── validateMiddleware.js  # express-validator wrapper
-│   ├── models/                    # Raw SQL data-access layer
-│   │   ├── userModel.js
-│   │   ├── leadModel.js
-│   │   └── noteModel.js
-│   ├── routes/                    # REST API routes
-│   │   ├── authRoutes.js
-│   │   ├── userRoutes.js
-│   │   ├── leadRoutes.js
-│   │   ├── noteRoutes.js
-│   │   └── dashboardRoutes.js
-│   ├── utils/
-│   │   └── generateToken.js
-│   ├── .env.example
-│   ├── package.json
+│   ├── config/           # connexion MySQL
+│   ├── controllers/      # logique métier (auth, leads, users, notes, dashboard)
+│   ├── database/         # schema.sql + seed.js
+│   ├── middleware/       # auth / roles / validation / erreurs
+│   ├── models/           # accès aux données (MySQL queries)
+│   ├── routes/           # routes REST (/api/*)
 │   └── server.js
-│
 └── frontend/
     ├── src/
-    │   ├── api/axios.js            # Axios instance + interceptors
-    │   ├── context/AuthContext.jsx # Auth state via Context API
-    │   ├── components/             # Reusable UI components
-    │   ├── pages/                  # Route-level pages
-    │   ├── utils/constants.js
-    │   ├── App.jsx
-    │   ├── main.jsx
-    │   └── index.css
-    ├── .env.example
+    │   ├── api/          # instance Axios
+    │   ├── components/   # composants réutilisables
+    │   ├── context/      # Auth / Language
+    │   ├── i18n/         # translations (fr / en)
+    │   ├── pages/        # routes page-level
+    │   └── App.jsx
     ├── index.html
-    ├── package.json
-    ├── tailwind.config.js
-    ├── postcss.config.js
-    └── vite.config.js
+    └── package.json
 ```
 
----
+## Prérequis
 
-## ⚙️ Prerequisites
+- Node.js 18+ (ou version compatible)
+- npm
+- MySQL (ex. XAMPP, MariaDB, ou toute instance MySQL accessible)
 
-- [Node.js](https://nodejs.org/) v18+
-- [XAMPP](https://www.apachefriends.org/) (for MySQL) — or any local MySQL server
-- npm (comes with Node.js)
+## Configuration
 
----
-
-## 🚀 Installation Guide
-
-### 1. Start MySQL
-
-Open XAMPP Control Panel and start the **MySQL** module. (You can leave
-Apache off — the backend runs on Node directly.)
-
-### 2. Create the database
-
-Import the schema using phpMyAdmin, or run from a terminal:
+- Copier les fichiers d'exemple d'environnement pour backend et frontend
+  si nécessaire :
 
 ```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+```
+
+- Variables importantes (dans `backend/.env`)
+
+- `PORT` : port du serveur Node (par défaut `5000`)
+- `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` : connexion MySQL
+- `JWT_SECRET`, `JWT_EXPIRES_IN` : configuration JWT
+- `CLIENT_URL` : origine frontend pour CORS (ex. `http://localhost:5173`)
+
+Le fichier d'exemple est disponible : [backend/.env.example](backend/.env.example).
+
+## Installation et exécution
+
+1) Préparer la base de données
+
+- Créez la base de données et les tables en important
+  `backend/database/schema.sql` :
+
+```bash
+# en remplaçant les paramètres si besoin
 mysql -u root -p < backend/database/schema.sql
 ```
 
-> If your `root` user has no password (default XAMPP setup), just run
-> `mysql -u root < backend/database/schema.sql`.
-
-This creates the `prestance_x_crm` database with the `users`, `leads`, and
-`notes` tables.
-
-### 3. Backend setup
+2) Backend
 
 ```bash
 cd backend
 npm install
+# copier .env.example puis ajuster les valeurs si nécessaire
 cp .env.example .env
-```
-
-Open `.env` and adjust `DB_USER` / `DB_PASSWORD` / `JWT_SECRET` if needed
-(defaults match a fresh XAMPP install: user `root`, empty password).
-
-Seed the database with one Admin account, one sample Commercial account, and
-a few sample leads:
-
-```bash
+# (optionnel) insérer des données d'exemple
 npm run seed
-```
-
-You'll see the generated credentials printed in the terminal, e.g.:
-
-```
-✅ Admin account created -> email: admin@prestancex.com | password: Admin@12345
-✅ Commercial account created -> email: commercial@prestancex.com | password: Commercial@12345
-```
-
-Start the API server:
-
-```bash
+# démarrer en mode développement (nodemon)
 npm run dev
 ```
 
-The API will run at **http://localhost:5000**. Test it with:
-`GET http://localhost:5000/api/health`
+Le backend écoute par défaut sur `http://localhost:5000`.
 
-### 4. Frontend setup
-
-Open a **new terminal**:
+3) Frontend
 
 ```bash
 cd frontend
 npm install
+# (optionnel) copier .env.example si fourni
 cp .env.example .env
 npm run dev
 ```
 
-The app will run at **http://localhost:5173**.
+Le serveur Vite par défaut s'exécute sur `http://localhost:5173`.
 
-### 5. Log in
+## Points de configuration supplémentaires
 
-Go to `http://localhost:5173/login` and sign in with the seeded Admin
-credentials printed in step 3.
+- L'instance Axios côté frontend utilise `VITE_API_URL` (ou `http://localhost:5000/api` par défaut) :
+  voir [frontend/src/api/axios.js](frontend/src/api/axios.js).
+- Les traductions se trouvent dans [frontend/src/i18n/translations.js](frontend/src/i18n/translations.js).
+- Le seed script (`backend/database/seed.js`) crée un compte Admin (d'après
+  `SEED_ADMIN_*` dans `.env`) et un compte Commercial d'exemple
+  (`commercial@prestancex.com` / `Commercial@12345`) si ces comptes
+  n'existent pas déjà.
 
----
+## Comptes de développement fournis (seed)
 
-## 🔑 Default Seeded Accounts
+Le script de seed crée par défaut :
 
-| Role       | Email                     | Password         |
-| ---------- | ------------------------- | ---------------- |
-| Admin      | admin@prestancex.com      | Admin@12345      |
-| Commercial | commercial@prestancex.com | Commercial@12345 |
+- Admin : email `admin@prestancex.com` (mot de passe par défaut défini
+  via `SEED_ADMIN_PASSWORD` dans `backend/.env`, exemple : `Admin@12345`)
+- Commercial : `commercial@prestancex.com` / `Commercial@12345`
 
-> ⚠️ These are development defaults defined in `backend/.env.example`.
-> Change `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` in your own `.env`
-> before seeding a production database, and rotate the password after
-> first login.
+Note : le seed n'écrase pas les comptes existants ; changez les valeurs
+dans `backend/.env` avant d'exécuter `npm run seed` pour des identifiants
+différents.
 
----
+## API — aperçu rapide
 
-## 📡 API Reference
+Base URL : `http://localhost:5000/api`
 
-Base URL: `http://localhost:5000/api`
+- Auth
+  - `POST /api/auth/login` — authentification (retourne JWT)
+  - `GET /api/auth/me` — infos utilisateur (protected)
+- Users (Admin only)
+  - `GET /api/users`, `POST /api/users`, `PUT /api/users/:id`, `DELETE /api/users/:id`
+- Leads
+  - `GET /api/leads` (filtres : `status`, `lead_source`, `interested_product`, `search`, `page`, `limit`)
+  - `GET /api/leads/:id`, `POST /api/leads`, `PUT /api/leads/:id`, `PATCH /api/leads/:id/status`, `DELETE /api/leads/:id` (Admin required for delete)
+- Notes
+  - `GET /api/leads/:leadId/notes`, `POST /api/leads/:leadId/notes` (protected)
+  - `DELETE /api/notes/:id` (Admin only)
+- Dashboard
+  - `GET /api/dashboard/stats` (protected)
 
-All protected routes require a header: `Authorization: Bearer <token>`
+Les routes protégées attendent un header `Authorization: Bearer <token>`.
 
-### Auth
+## Bonnes pratiques / Sécurité
 
-| Method | Endpoint      | Access  | Description        |
-| ------ | ------------- | ------- | ------------------ |
-| POST   | `/auth/login` | Public  | Login, returns JWT |
-| GET    | `/auth/me`    | Private | Get current user   |
+- Changez `JWT_SECRET` dans `backend/.env` pour une valeur forte en
+  production.
+- Ne stockez pas les fichiers `.env` dans un dépôt public. Utilisez les
+  exemples (`.env.example`) et des mécanismes sécurisés pour la gestion
+  des secrets en production.
 
-### Users (Admin only)
+## Améliorations possibles
 
-| Method | Endpoint              | Description         |
-| ------ | --------------------- | ------------------- |
-| GET    | `/users`              | List all users      |
-| GET    | `/users/:id`          | Get single user     |
-| POST   | `/users`              | Create user         |
-| PUT    | `/users/:id`          | Update user         |
-| PUT    | `/users/:id/password` | Reset user password |
-| DELETE | `/users/:id`          | Delete user         |
+- Exposer un endpoint public sécurisé pour la collecte automatique des
+  leads depuis un formulaire de site web (rate-limiting, CAPTCHA).
+- Notifications en temps réel (WebSocket) pour nouveaux leads ou mises
+  à jour de statut.
+- Pagination côté frontend améliorée (infinite scroll) et filtres plus
+  avancés (dates, attribution).
+- Tests automatisés (unit / integration) pour backend et frontend.
 
-### Leads (Admin + Commercial, unless noted)
-
-| Method | Endpoint            | Access         | Description                              |
-| ------ | ------------------- | -------------- | ---------------------------------------- |
-| GET    | `/leads`            | Private        | List leads (filters, search, pagination) |
-| GET    | `/leads/:id`        | Private        | Get single lead + notes                  |
-| POST   | `/leads`            | Private        | Create a lead                            |
-| PUT    | `/leads/:id`        | Private        | Update a lead                            |
-| PATCH  | `/leads/:id/status` | Private        | Update only the status                   |
-| DELETE | `/leads/:id`        | **Admin only** | Delete a lead                            |
-
-Query params supported on `GET /leads`: `status`, `lead_source`,
-`interested_product`, `search`, `page`, `limit`.
-
-### Notes
-
-| Method | Endpoint               | Access         | Description           |
-| ------ | ---------------------- | -------------- | --------------------- |
-| GET    | `/leads/:leadId/notes` | Private        | List notes for a lead |
-| POST   | `/leads/:leadId/notes` | Private        | Add a note to a lead  |
-| DELETE | `/notes/:id`           | **Admin only** | Delete a note         |
-
-### Dashboard
-
-| Method | Endpoint           | Description                                        |
-| ------ | ------------------ | -------------------------------------------------- |
-| GET    | `/dashboard/stats` | Total / new / contacted / converted + recent leads |
-
----
-
-## 🔌 Future Integration: Website Contact Form
-
-The API was intentionally designed so the public website's contact form can
-be connected later with minimal changes:
-
-- `POST /api/leads` already accepts all the fields a contact form would
-  submit (`first_name`, `last_name`, `phone`, `email`, `city`,
-  `interested_product`, `message`), and `lead_source` defaults to
-  `'Website'` if omitted.
-- To expose it publicly, add a lightweight **public route** (e.g.
-  `POST /api/public/leads`) that reuses `LeadModel.create` without the
-  `protect` middleware, ideally behind rate-limiting and a spam-honeypot
-  field.
-- All validation rules live in `routes/leadRoutes.js` and can be reused
-  as-is for the public endpoint.
-
----
-
-## 🧪 Useful Commands
+## Commandes utiles
 
 ```bash
 # Backend
 cd backend
-npm run dev      # start with nodemon (auto-restart)
-npm start        # start in production mode
-npm run seed      # seed admin + sample data
+npm run dev    # démarrage en dev (nodemon)
+npm start      # démarrage en production
+npm run seed    # exécute le seed pour insérer les comptes/données d'exemple
 
 # Frontend
 cd frontend
-npm run dev       # start Vite dev server
-npm run build     # production build
-npm run preview   # preview production build
+npm run dev     # démarre Vite (dev server)
+npm run build   # build production
+npm run preview # preview du build
 ```
 
----
+## Licence
 
-## 🛡️ Security Notes
-
-- Passwords are hashed with **bcrypt** (10 salt rounds) — never stored in plain text.
-- JWT tokens expire based on `JWT_EXPIRES_IN` (default `1d`).
-- Role-based middleware (`roleMiddleware.js`) enforces Admin-only actions
-  (user management, lead deletion, note deletion) at the API level — not
-  just hidden in the UI.
-- All inputs are validated server-side with `express-validator` in addition
-  to client-side validation.
-
----
-
-## 📄 License
-
-Built for educational purposes as part of the Future Interns Full Stack Web
-Development Internship. Free to use and adapt.
+Projet conçu à des fins pédagogiques dans le cadre du programme Future
+Interns. Libre d'utilisation pour des tests et de l'apprentissage.
